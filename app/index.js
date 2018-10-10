@@ -5,30 +5,56 @@ const fs = require('fs');
 const app = express();
 const startTime = Date.now();
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+app.get('/', function (request, response) {
+  response.send('Hello World!');
 });
 
-app.all('/status', function (req, res, next) {
+app.all('/status', function (request, response, next) {
   const currentTime = Date.now();
   const timeDelta = (currentTime - startTime) / 1000;
   const stringTime = format.formatTime(timeDelta);
 
-  res.send(stringTime);
+  response.send(stringTime);
   next();
 });
 
-app.all('/api/events', function (req, res, next) {
+app.all('/api/events', function (request, response, next) {
 
   if (!fs.existsSync('data/events.json')) {
-    console.log('The file does not exist! Please, provide data/events.json!');
+    response.status(500).send('The file does not exist! Please, provide data/events.json!');
     return;
   }
 
   const inputData = JSON.parse(fs.readFileSync('data/events.json', 'utf8'));
 
-  res.send(inputData);
+  let correctTypes = [];
+
+  inputData.events.forEach(function (item) {
+    if (correctTypes.indexOf(item.type) === -1) {
+      correctTypes.push(item.type);
+    }
+  });
+
+  const type = request.param('type');
+
+  if (type) {
+    if (correctTypes.indexOf(type) !== -1) {
+      const filteredData = inputData.events.filter(function (item) {
+        return item.type === type;
+      });
+      response.send(filteredData);
+    } else {
+      response.status(400).send('Its not a correct type!');
+    }
+  } else {
+    response.send(inputData);
+  }
+
   next();
+});
+
+app.get('*', function(request, response){
+  response.status(404).send('<h1>Page not found!</h1>');
 });
 
 app.listen(8000, function () {
