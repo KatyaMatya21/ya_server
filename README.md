@@ -12,5 +12,6 @@
 - `/api/events` содержимое файла `events.json`.
 - `/api/events?type=info` содержимое файла `events.json` c фильтрацией по типу событий.
 - `/api/events?type=critical` содержимое файла `events.json` c фильтрацией по типу событий.
-- `/api/events?type=info:critical` некоректный ввод типа.
+- `/api/events?type=info:critical` c фильтрацией по двум типам событий.
+- `/api/events?type=helpme` некоректный ввод типа.
 - `/helpme` 404.

@@ -12,7 +12,7 @@ app.get('/', function (request, response) {
 app.all('/status', function (request, response, next) {
   const currentTime = Date.now();
   const timeDelta = (currentTime - startTime) / 1000;
-  const stringTime = '<p>Сервер запущен уже: </p><strong>' + format.formatTime(timeDelta) + '</strong>';
+  const stringTime = format.formatTime(timeDelta);
 
   response.send(stringTime);
   next();
