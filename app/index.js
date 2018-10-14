@@ -5,23 +5,19 @@ const getData = require('./get-data.js');
 const app = express();
 const startTime = Date.now();
 
-app.get('/', function (request, response, next) {
+app.get('/', function (request, response) {
   response.send('Hello Reviewer!');
-  next();
 });
 
-app.all('/status', function (request, response, next) {
+app.get('/status', function (request, response) {
   const currentTime = Date.now();
   const timeDelta = (currentTime - startTime) / 1000;
   const stringTime = format.formatTime(timeDelta);
-
   response.send(stringTime);
-  next();
 });
 
-app.all('/api/events', function (request, response, next) {
+app.get('/api/events', function (request, response) {
   const inputData = getData.getData('data/events.json');
-
   let correctTypes = [];
 
   inputData.events.forEach(function (item) {
@@ -51,17 +47,13 @@ app.all('/api/events', function (request, response, next) {
     } else {
       response.status(400).send('Its not a correct type!');
     }
-
   } else {
     response.send(inputData);
   }
-
-  next();
 });
 
-app.get('*', function (request, response, next) {
+app.get('*', function (request, response) {
   response.status(404).send('<h1>Page not found!</h1>');
-  next();
 });
 
 app.listen(8000, function () {
