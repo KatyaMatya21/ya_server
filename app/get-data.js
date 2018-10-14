@@ -2,7 +2,7 @@ const fs = require('fs');
 
 /**
  * Gets data from file
- * @param url {string}
+ * @param {string} url
  * @returns {string}
  */
 const getData = function (url) {
