@@ -26,7 +26,6 @@ app.all('/api/events', function (request, response, next) {
   }
 
   const inputData = JSON.parse(fs.readFileSync('data/events.json', 'utf8'));
-
   let correctTypes = [];
 
   inputData.events.forEach(function (item) {
@@ -38,14 +37,25 @@ app.all('/api/events', function (request, response, next) {
   const type = request.param('type');
 
   if (type) {
-    if (correctTypes.indexOf(type) !== -1) {
+    const typeArray = type.split(':');
+    let isCorrect = false;
+
+    for (let item of typeArray) {
+      if (correctTypes.indexOf(item) !== -1) {
+        isCorrect = true;
+        break;
+      }
+    }
+
+    if (isCorrect) {
       const filteredData = inputData.events.filter(function (item) {
-        return item.type === type;
+        return typeArray.indexOf(item.type) !== -1;
       });
       response.send(filteredData);
     } else {
       response.status(400).send('Its not a correct type!');
     }
+
   } else {
     response.send(inputData);
   }
@@ -53,8 +63,9 @@ app.all('/api/events', function (request, response, next) {
   next();
 });
 
-app.get('*', function(request, response){
+app.get('*', function (request, response, next) {
   response.status(404).send('<h1>Page not found!</h1>');
+  next();
 });
 
 app.listen(8000, function () {
