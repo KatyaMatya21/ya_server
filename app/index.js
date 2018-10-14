@@ -1,12 +1,13 @@
 const express = require('express');
 const format = require('./format-time.js');
-const fs = require('fs');
+const getData = require('./get-data.js');
 
 const app = express();
 const startTime = Date.now();
 
-app.get('/', function (request, response) {
+app.get('/', function (request, response, next) {
   response.send('Hello World!');
+  next();
 });
 
 app.all('/status', function (request, response, next) {
@@ -19,13 +20,8 @@ app.all('/status', function (request, response, next) {
 });
 
 app.all('/api/events', function (request, response, next) {
+  const inputData = getData.getData('data/events.json');
 
-  if (!fs.existsSync('data/events.json')) {
-    response.status(500).send('The file does not exist! Please, provide data/events.json!');
-    return;
-  }
-
-  const inputData = JSON.parse(fs.readFileSync('data/events.json', 'utf8'));
   let correctTypes = [];
 
   inputData.events.forEach(function (item) {
