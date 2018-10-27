@@ -3,7 +3,7 @@ import express from 'express';
 import format from './format-time';
 import getData from './get-data';
 
-const app = express();
+const app: express.Application = express();
 const startTime = Date.now();
 
 interface Idata {
@@ -14,18 +14,18 @@ interface Ievent {
   type: string;
 }
 
-app.get('/', function (request, response): void {
+app.get('/', function (request: express.Request, response: express.Response): void {
   response.send('Hello Reviewer!');
 });
 
-app.get('/status', function (request, response): void {
+app.get('/status', function (request: express.Request, response: express.Response): void {
   const currentTime: number = Date.now();
   const timeDelta: number = (currentTime - startTime) / 1000;
   const stringTime: string = format(timeDelta);
   response.send(stringTime);
 });
 
-app.get('/api/events', function (request, response): void {
+app.get('/api/events', function (request: express.Request, response: express.Response): void {
   const inputData: Idata | boolean = getData('data/events.json');
 
   if (inputData === false) {
@@ -67,7 +67,7 @@ app.get('/api/events', function (request, response): void {
   }
 });
 
-app.get('*', function (request, response): void {
+app.get('*', function (request: express.Request, response: express.Response): void {
   response.status(404).send('<h1>Page not found!</h1>');
 });
 
