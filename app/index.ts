@@ -45,7 +45,7 @@ app.get('/api/events', function (request, response): void {
 
   if (type) {
     const typeArray: string[] = type.split(':');
-    let isCorrect = false;
+    let isCorrect: boolean = false;
 
     for (const item of typeArray) {
       if (correctTypes.indexOf(item) !== -1) {
