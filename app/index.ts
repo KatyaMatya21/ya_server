@@ -4,7 +4,7 @@ import format from './format-time';
 import getData from './get-data';
 
 const app: express.Application = express();
-const startTime = Date.now();
+const startTime: number = Date.now();
 
 interface Idata {
   events: Ievent[];
