@@ -41,7 +41,7 @@ app.get('/api/events', function (request, response): void {
     }
   });
 
-  const type: stringg = request.param('type');
+  const type: string = request.param('type');
 
   if (type) {
     const typeArray: string[] = type.split(':');
